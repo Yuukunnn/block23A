@@ -62,17 +62,18 @@ const addNewPlayer = async (playerObj) => {
  * @param {number} playerId the ID of the player to remove
  */
 const removePlayer = async (playerId) => {
+  console.log(playerId)
   try {
     const response = await fetch(
       `https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players/${playerId}`,
       {
         method: 'DELETE',
-        header: {'Content-Type': 'application.json'}
+        headers: {'Content-Type': 'application/json'}
       }
     )
       const result = await response.json();
       console.log(result);
-      fetchAllPlayers();
+      init();
   } catch (err) {
     console.error(
       `Whoops, trouble removing player #${playerId} from the roster!`,
@@ -109,40 +110,41 @@ const removePlayer = async (playerId) => {
     playerContainer.innerHTML ='';
 
     playersArry.forEach((player) => {
-    const playersUl = document.createElement('ul');
-    const playerName = document.createElement('li');
-    playerName.textContent = `Name: ${player.name}`;
-    const playerId = document.createElement('li');
-    playerId.textContent = `ID: ${player.id}`;
-    const playerImg = document.createElement('img');
-    playerImg.src = player.imageUrl;
-    playerImg.alt = player.name;
-    const detailsButton = document.createElement('button');
-    detailsButton.textContent = "Details" 
-    const removeButton = document.createElement('button');
-    removeButton.textContent = "Remove";
+      const playersUl = document.createElement('ul');
+      const playerName = document.createElement('li');
+      playerName.textContent = `Name: ${player.name}`;
+      const playerId = document.createElement('li');
+      playerId.textContent = `ID: ${player.id}`;
+      const playerImg = document.createElement('img');
+      playerImg.src = player.imageUrl;
+      playerImg.alt = player.name;
+      const detailsButton = document.createElement('button');
+      detailsButton.textContent = "Details" 
+      const removeButton = document.createElement('button');
+      removeButton.textContent = "Remove";
 
-    const playerInfoWrapper = document.createElement('div');
-    playerInfoWrapper.className = 'playerInfoWrapper';
+      const playerInfoWrapper = document.createElement('div');
+      playerInfoWrapper.className = 'playerInfoWrapper';
 
-    playerInfoWrapper.appendChild(playerName);
-    playerInfoWrapper.appendChild(playerId);
-    playerInfoWrapper.appendChild(detailsButton);
-    playerInfoWrapper.appendChild(removeButton);
+      playerInfoWrapper.appendChild(playerName);
+      playerInfoWrapper.appendChild(playerId);
+      playerInfoWrapper.appendChild(detailsButton);
+      playerInfoWrapper.appendChild(removeButton);
 
-    playersUl.appendChild(playerInfoWrapper);
-    playersUl.appendChild(playerImg);
-    playerContainer.appendChild(playersUl);
+      playersUl.appendChild(playerInfoWrapper);
+      playersUl.appendChild(playerImg);
+      playerContainer.appendChild(playersUl);
 
-    detailsButton.addEventListener('click', (e) => {
-      e.preventDefault;
-      renderSinglePlayer();
-    })
+      detailsButton.addEventListener('click', (e) => {
+        e.preventDefault;
+        renderSinglePlayer(player);
+      })
 
-    removeButton.addEventListener('click', (e) => {
-      e.preventDefault;
-      removePlayer();
-    })
+      removeButton.addEventListener('click', (e) => {
+        e.preventDefault;
+        removePlayer(player.id);
+
+      })
     
   })
   } else {
@@ -174,7 +176,7 @@ const renderSinglePlayer = (player) => {
     playerBreed.textContent = `Breed: ${player.breed}`;
     const playerId = document.createElement('li');
     playerId.textContent = `ID: ${player.id}`;
-    const playerTeam = ducument.createElement('li');
+    const playerTeam = document.createElement('li');
     if (player.team) {
     playerTeam.textContent = `Team: ${player.team}` 
   } else {
@@ -188,15 +190,19 @@ const renderSinglePlayer = (player) => {
 
     backButton.addEventListener('click', (e) => {
       e.preventDefault();
-      renderAllPlayers(playersArry)
+      init()
     });
 
-    playersUl.appendChild(playerName);
-    playersUl.appendChild(playerBreed);
-    playersUl.appendChild(playerId);
-    playersUl.appendChild(playerTeam);
-    
-    playersUl.appendChild(removeButton);
+    const playerInfoWrapper = document.createElement('div');
+    playerInfoWrapper.className = 'single';
+
+    playerInfoWrapper.appendChild(playerName);
+    playerInfoWrapper.appendChild(playerBreed);
+    playerInfoWrapper.appendChild(playerId);
+    playerInfoWrapper.appendChild(playerTeam);
+    playerInfoWrapper.appendChild(backButton);
+
+    playersUl.appendChild(playerInfoWrapper);
     playersUl.appendChild(playerImg);
     playerContainer.appendChild(playersUl);
 
