@@ -14,7 +14,6 @@ const fetchAllPlayers = async () => {
   try {
     const response = await fetch('https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players');
     const playersObj = await response.json();
-    console.log(playersObj);
     return playersObj.data.players;
   } catch (err) {
     console.error("Uh oh, trouble fetching players!", err);
@@ -47,11 +46,8 @@ const addNewPlayer = async (playerObj) => {
   try {
     const response = await fetch('https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players',
     { method: 'POST',
-      header: {'Content-Type': 'application.json'},
-      body: JSON.stringify({
-        name: '',
-        breed: '',
-    })
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(playerObj)
     }
   );
     const result = await response.json();
@@ -71,6 +67,7 @@ const removePlayer = async (playerId) => {
       `https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players/${playerId}`,
       {
         method: 'DELETE',
+        header: {'Content-Type': 'application.json'}
       }
     )
       const result = await response.json();
@@ -105,8 +102,8 @@ const removePlayer = async (playerId) => {
  */
 
   const renderAllPlayers = (playersArry) => {
-
     console.log(playersArry)
+
     if (playersArry.length >0 ) {
     const playerContainer = document.getElementById('players_container');
     playerContainer.innerHTML ='';
@@ -213,7 +210,45 @@ const renderSinglePlayer = (player) => {
  */
 const renderNewPlayerForm = () => {
   try {
-    // TODO
+
+    const newPlayerForm = document.getElementById('new-player-form');
+    newPlayerForm.innerHTML = '';
+
+    const fields = ['Name', 'Breed','Status', 'ImageUrl'];
+    fields.forEach((field) => {
+      const formLabel = document.createElement('label');
+      formLabel.textContent = field;
+      const formInput = document.createElement('input');
+      formInput.id = field + 'Input';
+      newPlayerForm.appendChild(formLabel);
+      newPlayerForm.appendChild(formInput);
+    })
+
+    const submitButton = document.createElement('button');
+    submitButton.textContent = "Submit";
+    newPlayerForm.appendChild(submitButton);
+    
+
+    submitButton.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      const newPlayerObj = {};
+      const nameElement = document.getElementById('NameInput');
+      const breedElement = document.getElementById('BreedInput');
+      const statusElement = document.getElementById('StatusInput');
+      const urlElement = document.getElementById('ImageUrlInput');
+
+      newPlayerObj.name = nameElement.value;
+      newPlayerObj.breed = breedElement.value;
+      newPlayerObj.status = statusElement.value;
+      newPlayerObj.imageUrl = urlElement.value;
+      newPlayerObj.teamId = 421;
+
+      await addNewPlayer(newPlayerObj);
+
+      init();
+    })
+    
   } catch (err) {
     console.error("Uh oh, trouble rendering the new player form!", err);
   }
