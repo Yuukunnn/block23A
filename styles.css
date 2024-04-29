@@ -3,3 +3,48 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+ header {
+  text-align: center;
+  color: Red;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+
+
+#players_container {
+  display: grid;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+  gap: 10px; 
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 200px;
+  border: solid 1px grey;
+  border-radius: 10px;
+  margin: 20px auto;
+  list-style-type: none;
+}
+
+.playerInfoWrapper {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+img {
+  max-width: 150px;
+  max-height: 170px;
+  
+}

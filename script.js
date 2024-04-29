@@ -1,7 +1,10 @@
 // Use the API_URL variable to make fetch requests to the API.
 // Replace the placeholder with your cohort name (ex: 2109-UNF-HY-WEB-PT)
 const cohortName = "YOUR COHORT NAME HERE";
-const API_URL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}`;
+const API_URL = `https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt`;
+//players: https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players
+
+
 
 /**
  * Fetches all players from the API.
@@ -9,7 +12,10 @@ const API_URL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}`;
  */
 const fetchAllPlayers = async () => {
   try {
-    // TODO
+    const response = await fetch('https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players');
+    const playersObj = await response.json();
+    console.log(playersObj);
+    return playersObj.data.players;
   } catch (err) {
     console.error("Uh oh, trouble fetching players!", err);
   }
@@ -22,11 +28,15 @@ const fetchAllPlayers = async () => {
  */
 const fetchSinglePlayer = async (playerId) => {
   try {
-    // TODO
+    const response = await fetch(`https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players/${playerId}`);
+    const singlePlayer = await response.json();
+    console.log(singlePlayer);
+    return playersObj.data.players;
   } catch (err) {
     console.error(`Oh no, trouble fetching player #${playerId}!`, err);
   }
 };
+
 
 /**
  * Adds a new player to the roster via the API.
@@ -35,7 +45,17 @@ const fetchSinglePlayer = async (playerId) => {
  */
 const addNewPlayer = async (playerObj) => {
   try {
-    // TODO
+    const response = await fetch('https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players',
+    { method: 'POST',
+      header: {'Content-Type': 'application.json'},
+      body: JSON.stringify({
+        name: '',
+        breed: '',
+    })
+    }
+  );
+    const result = await response.json();
+    console.log(result);
   } catch (err) {
     console.error("Oops, something went wrong with adding that player!", err);
   }
@@ -47,7 +67,15 @@ const addNewPlayer = async (playerObj) => {
  */
 const removePlayer = async (playerId) => {
   try {
-    // TODO
+    const response = await fetch(
+      `https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players/${playerId}`,
+      {
+        method: 'DELETE',
+      }
+    )
+      const result = await response.json();
+      console.log(result);
+      fetchAllPlayers();
   } catch (err) {
     console.error(
       `Whoops, trouble removing player #${playerId} from the roster!`,
@@ -75,8 +103,54 @@ const removePlayer = async (playerId) => {
  * Note: this function should replace the current contents of `<main>`, not append to it.
  * @param {Object[]} playerList - an array of player objects
  */
-const renderAllPlayers = (playerList) => {
-  // TODO
+
+  const renderAllPlayers = (playersArry) => {
+
+    console.log(playersArry)
+    if (playersArry.length >0 ) {
+    const playerContainer = document.getElementById('players_container');
+    playerContainer.innerHTML ='';
+
+    playersArry.forEach((player) => {
+    const playersUl = document.createElement('ul');
+    const playerName = document.createElement('li');
+    playerName.textContent = `Name: ${player.name}`;
+    const playerId = document.createElement('li');
+    playerId.textContent = `ID: ${player.id}`;
+    const playerImg = document.createElement('img');
+    playerImg.src = player.imageUrl;
+    playerImg.alt = player.name;
+    const detailsButton = document.createElement('button');
+    detailsButton.textContent = "Details" 
+    const removeButton = document.createElement('button');
+    removeButton.textContent = "Remove";
+
+    const playerInfoWrapper = document.createElement('div');
+    playerInfoWrapper.className = 'playerInfoWrapper';
+
+    playerInfoWrapper.appendChild(playerName);
+    playerInfoWrapper.appendChild(playerId);
+    playerInfoWrapper.appendChild(detailsButton);
+    playerInfoWrapper.appendChild(removeButton);
+
+    playersUl.appendChild(playerInfoWrapper);
+    playersUl.appendChild(playerImg);
+    playerContainer.appendChild(playersUl);
+
+    detailsButton.addEventListener('click', (e) => {
+      e.preventDefault;
+      renderSinglePlayer();
+    })
+
+    removeButton.addEventListener('click', (e) => {
+      e.preventDefault;
+      removePlayer();
+    })
+    
+  })
+  } else {
+    alert("Unfortunately, No Players availabile!")
+  }
 };
 
 /**
@@ -93,7 +167,43 @@ const renderAllPlayers = (playerList) => {
  * @param {Object} player an object representing a single player
  */
 const renderSinglePlayer = (player) => {
-  // TODO
+  const playerContainer = document.getElementById('players_container');
+    playerContainer.innerHTML ='';
+
+    const playersUl = document.createElement('ul');
+    const playerName = document.createElement('li');
+    playerName.textContent = `Name: ${player.name}`;
+    const playerBreed = document.createElement('li');
+    playerBreed.textContent = `Breed: ${player.breed}`;
+    const playerId = document.createElement('li');
+    playerId.textContent = `ID: ${player.id}`;
+    const playerTeam = ducument.createElement('li');
+    if (player.team) {
+    playerTeam.textContent = `Team: ${player.team}` 
+  } else {
+    playerTeam.textContent = "Unassigned";
+  };
+    const playerImg = document.createElement('img');
+    playerImg.src = player.imageUrl;
+    playerImg.alt = player.name;
+    const backButton = document.createElement('button');
+    backButton.textContent = "Back to All";
+
+    backButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      renderAllPlayers(playersArry)
+    });
+
+    playersUl.appendChild(playerName);
+    playersUl.appendChild(playerBreed);
+    playersUl.appendChild(playerId);
+    playersUl.appendChild(playerTeam);
+    
+    playersUl.appendChild(removeButton);
+    playersUl.appendChild(playerImg);
+    playerContainer.appendChild(playersUl);
+
+
 };
 
 /**
