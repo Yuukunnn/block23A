@@ -5,9 +5,16 @@
 }
 
  header {
+  width: 60%;
+  margin: 20px;
+  position: relative;
+  left:20%;
   text-align: center;
-  color: Red;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: solid 1px grey;
+  border-radius: 5px;
+  background-color: orange;
+  color: white
  }
 
 
@@ -49,4 +56,31 @@ img {
   max-width: 150px;
   max-height: 170px;
   
+}
+
+#new-player-form {
+  width: 40%;
+  padding: 10px;
+  position: relative;
+  left:30%;
+  border: solid 1px grey;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:5px;
+  justify-content: center;
+  align-items: center;
+}
+
+#new-player-form > :nth-child(9) {
+  grid-column: 1 / span 2;
+}
+
+label {
+  margin: auto;
+}
+
+.addNewPlayerBtn {
+  width: 50%;
+  margin: auto;
 }

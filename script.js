@@ -30,7 +30,7 @@ const fetchSinglePlayer = async (playerId) => {
     const response = await fetch(`https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players/${playerId}`);
     const singlePlayer = await response.json();
     console.log(singlePlayer);
-    return playersObj.data.players;
+    return singlePlayer.data.player;
   } catch (err) {
     console.error(`Oh no, trouble fetching player #${playerId}!`, err);
   }
@@ -44,14 +44,16 @@ const fetchSinglePlayer = async (playerId) => {
  */
 const addNewPlayer = async (playerObj) => {
   try {
-    const response = await fetch('https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players',
+    const newPlayer = await fetch('https://fsa-puppy-bowl.herokuapp.com/api/2402-ftb-mt-web-pt/players',
     { method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(playerObj)
     }
   );
-    const result = await response.json();
+    const result = await newPlayer.json();
     console.log(result);
+    return result.data.newPlayer;
+
   } catch (err) {
     console.error("Oops, something went wrong with adding that player!", err);
   }
@@ -231,7 +233,8 @@ const renderNewPlayerForm = () => {
     })
 
     const submitButton = document.createElement('button');
-    submitButton.textContent = "Submit";
+    submitButton.textContent = "Add";
+    submitButton.className = "addNewPlayerBtn";
     newPlayerForm.appendChild(submitButton);
     
 

@@ -28,7 +28,40 @@ describe("fetchAllPlayers", () => {
 });
 
 // TODO: Tests for `fetchSinglePlayer`
+describe("fetchSinglePlayer", () => {
+    let player;
+
+  beforeAll(async () => {
+    player = await fetchSinglePlayer(4101);
+  });
+
+  test("it returns an object not an array", function (){
+    expect (Array.isArray(player)).toBe(false);
+  })
+
+  test("the name is matching with ID", function(){
+    expect (player.name).toBe("Anise");
+  })
+})
+
 
 // TODO: Tests for `addNewPlayer`
+
+describe("addNewPlayer", () =>{
+    let testNewPlayer; 
+
+    beforeAll(async () => {
+      testNewPlayer = await addNewPlayer({
+          name: "Yukun",
+          breed: "yeye",
+          status: "field",
+          ImageUrl: "https://www.pexels.com/photo/portrait-photo-of-an-adult-black-pug-1851164/"
+      });
+    });
+
+    test("the API has a player named 'Yukun'", function () {
+      expect (testNewPlayer.name).toBe("Yukun");
+    })
+  })
 
 // (Optional) TODO: Tests for `removePlayer`
